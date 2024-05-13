@@ -8,8 +8,12 @@
 <body>
     <h1>SHA3-512 Hash Generator</h1>
     <form id="hashForm">
-        <label for="inputText">Enter Text:</label>
-        <input type="text" id="inputText" name="inputText">
+        <label for="inputText1">Enter Document 1:</label>
+        <textarea rows="50" cols="100" required id="inputText1" name="inputText1"></textarea>
+        
+        <label for="inputText2">Enter Document 2:</label>
+        <textarea rows="50" cols="100" required id="inputText2" name="inputText2"></textarea>
+        
         <button type="submit">Generate Hash</button>
     </form>
     <div id="hashResult"></div>

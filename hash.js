@@ -1,10 +1,23 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.8.0/sha3.min.js"></script>
+function CalculateHash(text) {
+    return sha3_512(text);
+}
 
-document.getElementById('hashForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+function CompareTexts(text1, text2) {
+    if (calculateHash(text1) === calculateHash(text2)) {
+        return "Texts match";
+    }
+    return "Texts do not match";
+}
 
-    var inputText = document.getElementById('inputText').value;
-    var hash = sha3_512(inputText);
+function FormHandler() {
+    document.getElementById('hashForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    document.getElementById('hashResult').innerText = "SHA3-512 hash of '" + inputText + "': " + hash;
-});
+        var inputText1 = document.getElementById('inputText1').value;
+        var inputText2 = document.getElementById('inputText2').value;
+
+        document.getElementById('hashResult').innerText = compareTexts(inputText1, inputText2);
+    });
+}
+
+FormHandler();
