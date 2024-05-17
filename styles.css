@@ -1,0 +1,68 @@
+.topStrip{
+    width: 100%;
+    height: 10%;
+    background-color: lightgrey;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-top: 2%;
+
+}
+
+.documentBoxTitle{
+    width: 30%;
+    margin: 3%;
+    align-content: center;
+    font-size: medium;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 2%;
+
+}
+
+.compareButton{
+    width: 30%;
+    
+    background-color: rgb(22, 84, 111);
+    min-height: 10vh;
+    border-radius: 10%;
+    color: white;
+}
+
+.mainContainer {
+width: 100%;
+height: 100%;
+background-color: rgb(211, 211, 211)211, 211);
+display: flex;
+flex-direction: row;
+}
+
+
+
+.documentBox {
+    width: 30%;
+    min-height: 80vh;
+    background-color:white;
+    box-shadow: inset 0px 0px 2px  ;
+    padding: 2%;
+    margin: 1%;
+    border-radius: 5%;
+    display: flex;
+    flex-direction: column;
+
+}
+.h1{
+    font-size: medium;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.centerBox {
+    width: 30%;
+    min-height: 80vh;
+    background-color: aqua;
+    box-shadow: inset 0px 0px 2px  ;
+    padding: 2%;
+    margin: 1%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5%;
+}
