@@ -1,7 +1,7 @@
 .topStrip{
     width: 100%;
     height: 10%;
-    background-color: lightgrey;
+    background-color: rgb(217, 215, 210);
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -10,28 +10,45 @@
 }
 
 .documentBoxTitle{
-    width: 30%;
-    margin: 3%;
-    align-content: center;
-    font-size: medium;
+    padding-top: 20%;
+    font-size: larger;
+    font-weight: bolder;
     font-family: Arial, Helvetica, sans-serif;
-    margin: 2%;
-
+    color:rgb(22, 84, 111) ;
+  
 }
 
-.compareButton{
+.submitButton{
     width: 30%;
-    
-    background-color: rgb(22, 84, 111);
-    min-height: 10vh;
-    border-radius: 10%;
+    background: linear-gradient(rgb(34, 128, 168),  rgb(22, 84, 111));
+    min-height: 20%;
+    border: none;
+    border-radius: 15px;
     color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: x-large;
+    font-weight: bolder;
+    box-shadow: 0 2px 2px  rgb(13, 51, 67);
+    transition: all 0.1s ease;
+
+    cursor: pointer;
+
+
+}
+.submitButton:hover{
+    box-shadow: 0px 5px 5px rgb(13, 51, 67) ;
+}
+
+.submitButton:active{
+    box-shadow: none;
+    transform: translateY(5px);
 }
 
 .mainContainer {
 width: 100%;
-height: 100%;
-background-color: rgb(211, 211, 211)211, 211);
+min-height: 80vh;
+height:auto;
+background-color:  rgb(217, 215, 210);
 display: flex;
 flex-direction: row;
 }
@@ -40,29 +57,72 @@ flex-direction: row;
 
 .documentBox {
     width: 30%;
-    min-height: 80vh;
+    min-height: 60%;
     background-color:white;
-    box-shadow: inset 0px 0px 2px  ;
+    box-shadow: inset 0px 0px 5px  ;
     padding: 2%;
     margin: 1%;
-    border-radius: 5%;
-    display: flex;
-    flex-direction: column;
+    border-radius: 15px;
+    word-wrap: break-word;
+
 
 }
-.h1{
-    font-size: medium;
-    font-family: Arial, Helvetica, sans-serif;
-}
 
-.centerBox {
+.blankCenterBox{
     width: 30%;
-    min-height: 80vh;
-    background-color: aqua;
-    box-shadow: inset 0px 0px 2px  ;
+    min-height: 80%;
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0px 0px 5px  ;
     padding: 2%;
     margin: 1%;
     display: flex;
     flex-direction: column;
-    border-radius: 5%;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.matchCenterBox {
+    width: 30%;
+    min-height: 80%;
+    background-color: rgb(46, 234, 46);
+    box-shadow: inset 0px 0px 5px  ;
+    padding: 2%;
+    margin: 1%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.mismatchCenterBox{
+    width: 30%;
+    min-height: 80%;
+    background-color: rgb(234, 30, 30);
+    box-shadow: inset 0px 0px 5px  ;
+    padding: 2%;
+    margin: 1%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.centerBoxText{
+    color: rgb(0, 0, 0);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: xx-large;
+    font-weight: bolder;
+}
+
+.ignoreBox{
+    margin:10px;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: cornflowerblue;
+    box-shadow: 0px 2px 5px rgb(14, 13, 13);
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: Arial, Helvetica, sans-serif;
 }
