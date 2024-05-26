@@ -71,7 +71,7 @@ flex-direction: row;
 .blankCenterBox{
     width: 30%;
     min-height: 80%;
-    background-color: rgb(255, 255, 255);
+    background: linear-gradient(rgb(217, 215, 210),rgb(168, 166, 162)) ;
     box-shadow: inset 0px 0px 5px  ;
     padding: 2%;
     margin: 1%;
@@ -79,12 +79,13 @@ flex-direction: row;
     flex-direction: column;
     border-radius: 15px;
     text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .matchCenterBox {
     width: 30%;
     min-height: 80%;
-    background-color: rgb(46, 234, 46);
+    background: linear-gradient(rgb(32, 239, 32),rgb(24, 179, 24)) ;
     box-shadow: inset 0px 0px 5px  ;
     padding: 2%;
     margin: 1%;
@@ -97,7 +98,7 @@ flex-direction: row;
 .mismatchCenterBox{
     width: 30%;
     min-height: 80%;
-    background-color: rgb(234, 30, 30);
+    background: linear-gradient(rgb(243, 9, 9),rgb(174, 10, 10)) ;
     box-shadow: inset 0px 0px 5px  ;
     padding: 2%;
     margin: 1%;
@@ -115,8 +116,8 @@ flex-direction: row;
 }
 
 .ignoreBox{
-    margin:5px;
-    padding: 5px;
+    margin:0px;
+    padding: 2px;
     border-radius: 15px;
     background-color: cornflowerblue;
     box-shadow: 0px 2px 5px rgb(14, 13, 13);
@@ -139,18 +140,19 @@ flex-direction: row;
     visibility: hidden;
 }
 .toggleLabel{
-    background-color: rgb(255, 255, 255);
+    background-color:rgb(32, 239, 32);
     width: 80px;
     height:40px;
     border-radius: 50px;
     cursor: pointer;
     display: inline-block;
     position: relative;
+    box-shadow: inset 0px 0px 2px;
 
 
 }
 .toggle:checked+ .toggleLabel{
-    background-color: rgb(82, 82, 82);
+    background-color: rgb(243, 9, 9);
 }
 .ball{
     background-color: rgb(183, 180, 173);
