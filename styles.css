@@ -1,0 +1,241 @@
+.topStrip{
+    width: 100%;
+    height: 10%;
+    top:0px;
+    background-color: rgb(217, 215, 210);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-top: 2%;
+
+}
+
+.documentBoxTitle{
+    
+    font-size: xx-large;
+    font-weight: bolder;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(22, 84, 111) ;
+    text-shadow: 0px 1px 1px black;
+  
+}
+
+.submitButton{
+    width: 30%;
+    background: linear-gradient(rgb(34, 128, 168),  rgb(22, 84, 111));
+    min-height: 20%;
+    border-style : solid;
+    border-width: 1px;
+    border-radius: 15px;
+    text-shadow: 0px 1px 1px black;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: xx-large;
+    font-weight: bolder;
+    box-shadow: 0 2px 2px  rgb(13, 51, 67);
+    transition: all 0.1s ease;
+
+    cursor: pointer;
+
+
+}
+.submitButton:hover{
+    background: linear-gradient(rgb(36, 135, 177),  rgb(13, 50, 65));
+
+    
+}
+
+.submitButton:active{
+    background: linear-gradient(to right,rgb(34, 128, 168),  rgb(22, 84, 111));
+    box-shadow: 0px .5px .5px  rgb(13, 51, 67);
+    transform: translateY(5px);
+}
+
+.mainContainer {
+width: 100%;
+min-height: 80vh;
+height:auto;
+background-color:  rgb(217, 215, 210);
+display: flex;
+flex-direction: row;
+}
+
+
+
+.documentBox {
+    width: 30%;
+    min-height: 60%;
+    max-height: 100vh;
+    background-color:white;
+    box-shadow: inset 0px 0px 5px  ;
+    
+    margin: 1%;
+    border-radius: 15px;
+    overflow: hidden;
+    padding: 15px;
+
+   
+
+
+}
+
+
+  .textarea{
+    width: 100%;
+    height: 100%;
+    border:none;
+    outline:none;
+    
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+    padding: 15px;
+    
+    line-height: 140%;
+    min-height: 100%;
+    padding: 5px;
+    resize:none;
+    box-sizing: content-box;
+    
+
+  }
+
+.blankCenterBox{
+    width: 30%;
+    min-height: 80%;
+    background: linear-gradient(rgb(217, 215, 210),rgb(168, 166, 162)) ;
+    box-shadow: inset 0px 0px 5px  ;
+    padding: 2%;
+    margin: 1%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    
+}
+
+.matchCenterBox {
+    width: 30%;
+    min-height: 80%;
+    background: linear-gradient(rgb(32, 239, 32),rgb(24, 179, 24)) ;
+    box-shadow: inset 0px 0px 5px  ;
+    padding: 2%;
+    margin: 1%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    text-align: center;
+    
+}
+
+.mismatchCenterBox{
+    width: 30%;
+    min-height: 80%;
+    background: linear-gradient(rgb(243, 9, 9),rgb(174, 10, 10)) ;
+    box-shadow: inset 0px 0px 5px  ;
+    padding: 2%;
+    margin: 1%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    text-align: center;
+    max-height: 80%;
+    
+
+    overflow: auto;
+    
+}
+
+.centerBoxText{
+    color: rgb(0, 0, 0);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: xx-large;
+    font-weight: bolder;
+    text-shadow: 0px 1px 1px black;
+}
+
+.ignoreBox{
+    margin:10px;
+    padding: 2px;
+    border-radius: 15px;
+    background-color: cornflowerblue;
+    box-shadow: 0px 2px 5px rgb(14, 13, 13);
+    background: linear-gradient(rgb(226, 219, 82),rgb(161, 156, 54)) ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.toggleBox{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+    margin: 5px;
+}
+
+.toggle{
+    visibility: hidden;
+}
+.toggleLabel{
+    background-color:rgb(32, 239, 32);
+    width: 80px;
+    height:40px;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    box-shadow: inset 0px 0px 5px;
+    margin:10px;
+
+
+}
+.toggle:checked+ .toggleLabel{
+    background-color: rgb(243, 9, 9);
+}
+.ball{
+   background: linear-gradient(rgb(217, 215, 210),rgb(168, 166, 162)) ;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    position: absolute;
+    bottom: 0.5px;
+    left: 0px;
+    animation: slideOff 0.15s linear forwards;
+    box-shadow: 0px 2px 2px;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: rgb(51, 51, 51);
+
+}
+
+.toggle:checked + .toggleLabel .ball{
+    animation: slideOn 0.15s linear forwards;
+}
+
+
+@keyframes slideOn{
+    0%{
+        transform: translateX(0) scale(1);
+    }
+    50%{
+        transform: translateX(20px) scale(1.002);
+    }
+    100%{
+        transform: translateX(40px) scale(1);
+    }
+}
+@keyframes slideOff{
+    0%{
+        transform: translateX(40px) scale(1);
+    }
+    50%{
+        transform: translateX(20px) scale(1.002);
+    }
+    100%{
+        transform: translateX(0px) scale(1);
+    }
+}
