@@ -1,5 +1,9 @@
+const INPUT_TEXT1_ID = 'Document01';
+const INPUT_TEXT2_ID = 'Document02';
+const IGNORE_INDICES_ID = 'ignoreIndices';
 const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
+
 
 function calculateHash(text) {
     return sha3_512(text);
