@@ -3,22 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHA3-512 Base Functionality</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Kawakawa Contract Comparator</title>
 </head>
 <body>
-    <h1>SHA3-512 Hash Generator</h1>
-    <form id="hashForm">
-        <label for="inputText1">Enter Document 1:</label>
-        <textarea rows="50" cols="100" required id="inputText1" name="inputText1"></textarea>
-        
-        <label for="inputText2">Enter Document 2:</label>
-        <textarea rows="50" cols="100" required id="inputText2" name="inputText2"></textarea>
-        
-        <button type="submit">Generate Hash</button>
-    </form>
-    <div id="hashResult"></div>
+    <div class="topStrip">
+        <div class="titleBox">
+        <h1 class="documentBoxTitle">Document 01</h1>
+        </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.8.0/sha3.min.js"></script>
-    <script src="hash.js"></script>
+        <button class="submitButton">
+            SUBMIT
+        </button>
+
+        <div class="titleBox">
+        <h1 class="documentBoxTitle">Document 02</h1>
+        </div>
+    </div>
+    <div class="mainContainer">
+        
+        <div class="documentBox">
+            <textarea class="textarea" id="Document01" name="Document01">
+            Paste text here
+            </textarea>
+        </div>
+        <!--begin HTML extension. Different class and CSS for each center box condition (untested, match, mismatch)-->
+        <div class="blankCenterBox">
+            <h1 class="centerBoxText"> Not Submitted</h1>
+             Click "Submit" to compare the documents.
+        </div>
+        <!--end html extension-->
+        <div class="documentBox">
+            <textarea class="textarea" id="Document02" name="Document02">
+                Text goes here
+            </textarea>
+    </div>
+    </div>
 </body>
 </html>
