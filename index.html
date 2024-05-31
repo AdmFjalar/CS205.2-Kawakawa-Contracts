@@ -28,12 +28,40 @@
             Paste text here
             </textarea>
         </div>
-        <!--begin HTML extension. Different class and CSS for each center box condition (untested, match, mismatch)-->
         <div class="blankCenterBox">
             <h1 class="centerBoxText"> Not Submitted</h1>
              Click "Submit" to compare the documents.
         </div>
-        <!--end html extension-->
+        <!--end UNTESTED center box HTML-->
+        <!--begin MATCH center box HTML-->
+        <div class="matchCenterBox">
+            <h1 class="centerBoxText">MATCH</h1>
+             
+        </div>
+        <!--end MATCH center box html-->
+        <!--begin MISMATCH center box HTML-->
+        <div class="mismatchCenterBox">
+            <h2 class="centerBoxText">MISMATCH</h2>
+            <!--begin IGNOREBOX html-->
+            <div class="ignoreBox">
+                <h3>Mismatch 01</h3>
+                Stuff stuff stuff
+                <div class="toggleBox">
+                ON
+                <!--Slider toggle begin-->
+                <input type="checkbox" id="ignore" class="toggle">
+                <label for="ignore" class="toggleLabel">
+                    <div class="ball"></div>
+                </label>
+                OFF
+
+                <!--Slider toggle end-->
+                </div>
+            </div>
+            <!--end IGNOREBOX html-->
+            
+        </div>
+        <!--end MISMATCH center box HTML-->
         <div class="documentBox">
             <textarea class="textarea" id="Document02" name="Document02">
                 Text goes here
