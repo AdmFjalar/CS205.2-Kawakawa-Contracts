@@ -4,6 +4,9 @@ const IGNORE_INDICES_ID = 'ignoreIndices';
 const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
 
+function findShortestDiff(text1, text2) {
+    diff(text1, text2);
+}
 
 function calculateHash(text) {
     return sha3_512(text);
