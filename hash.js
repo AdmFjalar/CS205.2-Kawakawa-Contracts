@@ -16,23 +16,19 @@ function compareTexts(text1, text2, ignoreIndices) {
     let nonMatchingIndices = [];
     
     for (let i = 0; i < Math.max(text1.length, text2.length); i++) {
-       
         if (!ignoreIndices.includes(i) && text1[i] !== text2[i]) {
             nonMatchingIndices.push(i);
         }
     }
 
-        const filteredText1 = ignoreText(text1, ignoreIndices);
-        const filteredText2 = ignoreText(text2, ignoreIndices);
+    const filteredText1 = ignoreText(text1, ignoreIndices);
+    const filteredText2 = ignoreText(text2, ignoreIndices);
+    const match = calculateHash(filteredText1) === calculateHash(filteredText2);
     
-       
-        const match = calculateHash(filteredText1) === calculateHash(filteredText2);
-        
-        return {
-            match,
-            nonMatchingIndices
-        };
-
+    return {
+        match,
+        nonMatchingIndices
+    };
 }
 
 function formHandler() {
@@ -48,9 +44,7 @@ function formHandler() {
         let resultText = result.match ? "Texts match" : `Texts do not match at indices: ${result.nonMatchingIndices.join(', ')}`;
         
         document.getElementById(HASH_RESULT_ID).innerText = resultText;
-        
     });
-
 }
 
 formHandler();
