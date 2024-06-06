@@ -3,8 +3,31 @@ const INPUT_TEXT2_ID = 'Document02';
 const IGNORE_INDICES_ID = 'ignoreIndices';
 const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
-let testState = 'nope';
 
+
+
+function toggleDisplay(testState){
+    var blankCenterBox = document.querySelector('.blankCenterBox');
+    var matchCenterBox = document.querySelector('.matchCenterBox');
+    var mismatchCenterBox = document.querySelector('.mismatchCenterBox');
+    
+    if (testState === "mismatch"){
+        blankCenterBox.style.display='none';
+        matchCenterBox.style.display='none';
+        mismatchCenterBox.style.display='block'; 
+    }
+    else if(testState=== "match" ){
+        blankCenterBox.style.display='none';
+        matchCenterBox.style.display='block';
+        mismatchCenterBox.style.display='none'; 
+    }
+    else
+    {
+        blankCenterBox.style.display='block';
+        matchCenterBox.style.display='none';
+        mismatchCenterBox.style.display='none'; 
+    }
+    }
 
 function calculateHash(text) {
     return sha3_512(text);
@@ -50,12 +73,13 @@ function formHandler() {
         let resultText = result.match ? "Texts match" : "Texts do not match";/*`Texts do not match at indices: ${result.nonMatchingIndices.join(', ')}`*/
         
         if (result){
-            testState="match";
+            toggleDisplay("match");
         }
         
         else{
-            testState="mismatch";
-        };
+            toggleDisplay("mismatch");
+        }
+        
 
         document.getElementById(HASH_RESULT_ID).innerText = resultText;
         
@@ -63,25 +87,10 @@ function formHandler() {
 
 }
 
-function toggleDisplay(testState){
-    var blankCenterBox = document.querySelector('.blankCenterBox');
-    var matchCenterBox = document.querySelector('.matchCenterBox');
-    var mismatchCenterBox = document.querySelector('.mismatchCenterBox');
-    
-    if (testState === "mismatch"){
-        mismatchCenterBox.style.display='block'; 
-    }
-    else if(testState=== "match" ){
-        matchCenterBox.style.display='block'; 
-    }
-    else
-    {
-        blankCenterBox.style.display='block';
-    }
-    }
+
 
 
 formHandler();
 
 
-toggleDisplay(testState);
+
