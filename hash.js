@@ -3,6 +3,7 @@ const INPUT_TEXT2_ID = 'Document02';
 const IGNORE_INDICES_ID = 'ignoreIndices';
 const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
+let testState = 'nope';
 
 
 function calculateHash(text) {
@@ -48,11 +49,39 @@ function formHandler() {
         const result = compareTexts(inputText1, inputText2/*, ignoreIndices*/);
         let resultText = result.match ? "Texts match" : "Texts do not match";/*`Texts do not match at indices: ${result.nonMatchingIndices.join(', ')}`*/
         
+        if (result){
+            testState="match";
+        }
+        
+        else{
+            testState="mismatch";
+        };
+
         document.getElementById(HASH_RESULT_ID).innerText = resultText;
         
     });
 
 }
 
+function toggleDisplay(testState){
+    var blankCenterBox = document.querySelector('.blankCenterBox');
+    var matchCenterBox = document.querySelector('.matchCenterBox');
+    var mismatchCenterBox = document.querySelector('.mismatchCenterBox');
+    
+    if (testState === "mismatch"){
+        mismatchCenterBox.style.display='block'; 
+    }
+    else if(testState=== "match" ){
+        matchCenterBox.style.display='block'; 
+    }
+    else
+    {
+        blankCenterBox.style.display='block';
+    }
+    }
+
+
 formHandler();
 
+
+toggleDisplay(testState);

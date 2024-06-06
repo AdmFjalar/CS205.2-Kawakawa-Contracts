@@ -100,7 +100,7 @@ flex-direction: row;
   }
 
 .blankCenterBox{
-    display: block !important;
+    
     width: 30%;
     min-height: 80%;
     background: linear-gradient(rgb(217, 215, 210),rgb(168, 166, 162)) ;
@@ -116,7 +116,7 @@ flex-direction: row;
 }
 
 .matchCenterBox {
-    display: none !important;
+    
     width: 30%;
     min-height: 80%;
     background: linear-gradient(rgb(32, 239, 32),rgb(24, 179, 24)) ;
@@ -131,7 +131,7 @@ flex-direction: row;
 }
 
 .mismatchCenterBox{
-    display: none !important;
+    
     width: 30%;
     min-height: 80%;
     background: linear-gradient(rgb(243, 9, 9),rgb(174, 10, 10)) ;
