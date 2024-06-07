@@ -13,23 +13,11 @@ function calculateHash(text) {
     return sha3_512(text);
 }
 
-function compareTexts(text1, text2, ignoreIndicesInput) {
-    let nonMatchingIndices = [];
-    const ignoreIndices = ignoreIndicesInput.split(',').map(Number).filter(index => !isNaN(index));
-
-    for (let i = 0; i < Math.max(text1.length, text2.length); i++) {
-        if (!ignoreIndices.includes(i) && text1[i] !== text2[i]) {
-            nonMatchingIndices.push(i);
-        }
-    }
-
-    const filteredText1 = ignoreText(text1, ignoreIndicesInput);
-    const filteredText2 = ignoreText(text2, ignoreIndicesInput);
-    const match = calculateHash(filteredText1) === calculateHash(filteredText2);
+function compareTexts(text1, text2) {
+   const match = calculateHash(filteredText1) === calculateHash(filteredText2);
 
     return {
-        match,
-        nonMatchingIndices
+        match
     };
 }
 
@@ -39,10 +27,9 @@ function formHandler() {
 
         const inputText1 = document.getElementById(INPUT_TEXT1_ID).value;
         const inputText2 = document.getElementById(INPUT_TEXT2_ID).value;
-        const ignoreIndicesInput = document.getElementById(IGNORE_INDICES_ID).value;
-
-        const result = compareTexts(inputText1, inputText2, ignoreIndicesInput);
-        let resultText = result.match ? "Texts match" : `Texts do not match at indices: ${result.nonMatchingIndices.join(', ')}`;
+       
+        const result = compareTexts(inputText1, inputText2);
+        let resultText = result.match ? "Texts match" : `Texts do not match at indices`;
 
         document.getElementById(HASH_RESULT_ID).innerText = resultText;
     });
