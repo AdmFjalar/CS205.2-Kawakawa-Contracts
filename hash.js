@@ -5,16 +5,13 @@ const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
 
 var BACKGROUND_COLORS =[
-"linear-gradient(rgb(36, 113, 164),rgb(18, 56, 82))",
-"linear-gradient(rgb(171, 22, 92),rgb(85,11,46))",
-"linear-gradient(rgb(13, 206, 164),rgb(6,103,82))",
-"linear-gradient(rgb(146, 113, 75),rgb(73, 56, 57))",
-"linear-gradient(rgb(127, 29, 218),rgb(63,14,109))",
-"linear-gradient(rgb(169, 205, 27),rgb(84,103,13))"];
+"rgb(36,113,164)",
+"rgb(13,206,164)",
+"rgb(127,29,218)"];
 
 let lastColors=[];
 
-function getRandomColors(){
+function getRandomColors(){ //fetches an RGB code from the array; dosen't re-use any colors till entire array is used
     var randomIndex;
     do{
         randomIndex =Math.floor(Math.random()*BACKGROUND_COLORS.length);
@@ -27,6 +24,21 @@ function getRandomColors(){
     return BACKGROUND_COLORS[randomIndex];
 }
 
+function darkenColor(rgb,percent){ //darkens RGB by specified percentage and returns new rgb code
+    const[r,g,b]=rgb.match(/\d+/g).map(Number);
+
+    const factor=1-percent/100;
+    const newR=Math.max(0,Math.min(255,Math.floor(r*factor)));
+    const newG=Math.max(0,Math.min(255,Math.floor(g*factor)));
+    const newB=Math.max(0,Math.min(255,Math.floor(b*factor)));
+    return "rgb(${newR},${newG},${newB})";
+}
+
+function createGradient(rgb){ //takes an RGB, generates a darker version and creates a gradient 
+    const darkerColor=darkenColor(rgb, 50);
+    return "linear-gradient(${rbg}, ${darkerColor})";
+}
+
 function generateIgnoreBox(){ 
 
     //get orginal element
@@ -36,8 +48,11 @@ function generateIgnoreBox(){
     //set new attributes like ID and color
     clone.id ='ignoreBox02';
     //get a new color
-    var newColor=getRandomColors();
-    clone.style.background=newColor;
+    var newColor=getRandomColors(); //returns a single colour from the list
+    var newGradient=createGradient(newColor);//turns this into a gradient
+    
+
+    clone.style.background=newGradient;
 
 
     //append
