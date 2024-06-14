@@ -55,7 +55,7 @@
 width: 100%;
 min-height: 80vh;
 height:auto;
-background-color:  rgb(217, 215, 210);
+background-color:  rgb(217, 215, 210) ;
 display: flex;
 flex-direction: row;
 }
@@ -100,7 +100,7 @@ flex-direction: row;
   }
 
 .blankCenterBox{
-    display: block !important;
+    
     width: 30%;
     min-height: 80%;
     background: linear-gradient(rgb(217, 215, 210),rgb(168, 166, 162)) ;
@@ -116,7 +116,7 @@ flex-direction: row;
 }
 
 .matchCenterBox {
-    display: none !important;
+    
     width: 30%;
     min-height: 80%;
     background: linear-gradient(rgb(32, 239, 32),rgb(24, 179, 24)) ;
@@ -131,7 +131,7 @@ flex-direction: row;
 }
 
 .mismatchCenterBox{
-    display: none !important;
+    
     width: 30%;
     min-height: 80%;
     background: linear-gradient(rgb(243, 9, 9),rgb(174, 10, 10)) ;
@@ -161,9 +161,8 @@ flex-direction: row;
     margin:10px;
     padding: 2px;
     border-radius: 15px;
-    background-color: cornflowerblue;
     box-shadow: 0px 2px 5px rgb(14, 13, 13);
-    background: linear-gradient(rgb(226, 219, 82),rgb(161, 156, 54)) ;
+    background: linear-gradient(rgb(226, 219, 82),rgb(113, 109, 41)) ;
     display: flex;
     flex-direction: column;
     justify-content: center;

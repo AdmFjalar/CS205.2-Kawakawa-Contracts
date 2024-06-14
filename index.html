@@ -29,21 +29,38 @@
             </textarea>
         </div>
         <div class="blankCenterBox">
+            <style>
+                .blankCenterBox{
+                    display:block;
+                }
+            </style>
             <h1 class="centerBoxText"> Not Submitted</h1>
              Click "Submit" to compare the documents.
         </div>
         <!--end UNTESTED center box HTML-->
         <!--begin MATCH center box HTML-->
         <div class="matchCenterBox">
+            <style>
+                .matchCenterBox{
+                    display:none;
+                }
+            </style>
             <h1 class="centerBoxText">MATCH</h1>
              
         </div>
         <!--end MATCH center box html-->
         <!--begin MISMATCH center box HTML-->
-        <div class="mismatchCenterBox">
+        <div class="mismatchCenterBox" id='mismatchCenterBox01'>
+            <style>
+                .mismatchCenterBox{
+                    display:none;
+                }
+            </style>
             <h2 class="centerBoxText">MISMATCH</h2>
             <!--begin IGNOREBOX html-->
-            <div class="ignoreBox">
+           
+            <div class="ignoreBox" id='ignoreBox01'>
+               
                 <h3>Mismatch 01</h3>
                 Stuff stuff stuff
                 <div class="toggleBox">
