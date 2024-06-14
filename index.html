@@ -10,85 +10,48 @@
 <form id="hashForm">
     <div class="topStrip">
         <div class="titleBox">
-        <h1 class="documentBoxTitle">Document 01</h1>
+            <h1 class="documentBoxTitle">Document 01</h1>
         </div>
-
-        <button type="submit" class="submitButton">
-            SUBMIT
-        </button>
-
+        <button type="submit" class="submitButton">SUBMIT</button>
         <div class="titleBox">
-        <h1 class="documentBoxTitle">Document 02</h1>
+            <h1 class="documentBoxTitle">Document 02</h1>
         </div>
     </div>
     <div class="mainContainer">
-        
         <div class="documentBox">
-            <textarea class="textarea" id="Document01" name="Document01">
-            Paste text here
-            </textarea>
+            <textarea class="textarea" id="Document01" name="Document01">Paste text here</textarea>
+            <p class="paragraph" id="paragraph01"></p>
         </div>
         <div class="blankCenterBox">
-            <style>
-                .blankCenterBox{
-                    display:block;
-                }
-            </style>
-            <h1 class="centerBoxText"> Not Submitted</h1>
-             Click "Submit" to compare the documents.
+            <h1 class="centerBoxText">Not Submitted</h1>
+            Click "Submit" to compare the documents.
         </div>
-        <!--end UNTESTED center box HTML-->
-        <!--begin MATCH center box HTML-->
         <div class="matchCenterBox">
-            <style>
-                .matchCenterBox{
-                    display:none;
-                }
-            </style>
             <h1 class="centerBoxText">MATCH</h1>
-             
         </div>
-        <!--end MATCH center box html-->
-        <!--begin MISMATCH center box HTML-->
         <div class="mismatchCenterBox" id='mismatchCenterBox01'>
-            <style>
-                .mismatchCenterBox{
-                    display:none;
-                }
-            </style>
             <h2 class="centerBoxText">MISMATCH</h2>
-            <!--begin IGNOREBOX html-->
-           
             <div class="ignoreBox" id='ignoreBox01'>
-               
                 <h3>Mismatch 01</h3>
                 Stuff stuff stuff
                 <div class="toggleBox">
-                ON
-                <!--Slider toggle begin-->
-                <input type="checkbox" id="ignore" class="toggle">
-                <label for="ignore" class="toggleLabel">
-                    <div class="ball"></div>
-                </label>
-                OFF
-
-                <!--Slider toggle end-->
+                    ON
+                    <input type="checkbox" id="ignore" class="toggle">
+                    <label for="ignore" class="toggleLabel">
+                        <div class="ball"></div>
+                    </label>
+                    OFF
                 </div>
             </div>
-            <!--end IGNOREBOX html-->
-            
         </div>
-        <!--end MISMATCH center box HTML-->
         <div class="documentBox">
-            <textarea class="textarea" id="Document02" name="Document02">
-                Text goes here
-            </textarea>
-    </div>
-
-    <p id="hashResult"></p>
+            <textarea class="textarea" id="Document02" name="Document02">Text goes here</textarea>
+            <p class="paragraph" id="paragraph02"></p>
+        </div>
     </div>
 </form>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.8.0/sha3.min.js"></script>
-    <script src="hash.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.8.0/sha3.min.js"></script>
+<script src="hash.js"></script>
 </body>
 </html>
+
