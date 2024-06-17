@@ -91,67 +91,100 @@ function compareTexts(text1, text2) {
  * @param {string} text2 The second text.
  * @returns {Object} An object containing arrays of removed and added word indexes.
  */
-function diff(text1, text2) {
-  const removed = [];
-  const added = [];
+function diffTexts(text1, text2) {
+  // Step 1: Compute the longest common subsequence (LCS) using dynamic programming
 
-  // Tokenize the texts into arrays of words
-  const words1 = text1.split(' ');
-  const words2 = text2.split(' ');
+  // Initialize a 2D array to store the length of LCS for substrings
+  const dp = [];
+  const len1 = text1.length;
+  const len2 = text2.length;
 
-  // Find removed words
-  removed.push(...words1.filter(word => !words2.includes(word)));
+  for (let i = 0; i <= len1; i++) {
+      dp[i] = [];
+      for (let j = 0; j <= len2; j++) {
+          if (i === 0 || j === 0) {
+              dp[i][j] = 0;
+          } else if (text1[i - 1] === text2[j - 1]) {
+              dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+              dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+          }
+      }
+  }
 
-  // Find added words
-  added.push(...words2.filter(word => !words1.includes(word)));
+  // Step 2: Trace back to find the differences
+  let i = len1;
+  let j = len2;
+  const diff = {
+      removed: [],
+      added: []
+  };
 
-  return { removed, added };
+  while (i > 0 || j > 0) {
+      if (i > 0 && j > 0 && text1[i - 1] === text2[j - 1]) {
+          // Characters are the same, move diagonally up-left
+          i--;
+          j--;
+      } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+          // Character in text2 is added
+          diff.added.unshift(j - 1); // Store index of added character
+          j--;
+      } else if (i > 0 && (j === 0 || dp[i][j - 1] < dp[i - 1][j])) {
+          // Character in text1 is removed
+          diff.removed.unshift(i - 1); // Store index of removed character
+          i--;
+      }
+  }
+
+  console.log(diff);
+
+  return diff;
 }
 
+// Function to wrap characters in text with specified highlights
 function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
   const textContainer1 = document.getElementById(textContainer1Id);
   const textContainer2 = document.getElementById(textContainer2Id);
-  const text1 = textContainer1.textContent.trim(); // Trim to remove any leading/trailing whitespace
-  const text2 = textContainer2.textContent.trim(); // Trim to remove any leading/trailing whitespace
+  const text1 = textContainer1?.textContent?.trim() || '';
+  const text2 = textContainer2?.textContent?.trim() || '';
 
-  const removed = diffOutput.removed;
-  const added = diffOutput.added;
+  // Function to wrap characters with colored spans
+  const wrapCharacters = (text, changes) => {
+    if (!text || !changes || changes.length === 0) {
+      return text; // Return original text if there are no changes
+    }
 
-  // Log removed and added words to console for troubleshooting
-  console.log('Removed Words:', removed);
-  console.log('Added Words:', added);
-
-  // Function to wrap words with colored spans
-  const wrapWords = (container, words, originalText) => {
     let result = '';
     let currentIndex = 0;
 
-    words.forEach(word => {
-      // Find the index of the word in the original text
-      const startIndex = originalText.indexOf(word, currentIndex);
-      const endIndex = startIndex + word.length;
+    while (currentIndex < text.length) {
+      if (changes.includes(currentIndex)) {
+        const start = currentIndex;
+        // Find end of the sequence of changes
+        while (currentIndex < text.length && changes.includes(currentIndex)) {
+          currentIndex++;
+        }
+        const end = currentIndex;
+        // Wrap sequence of changes in span tag
+        result += `<span style="background-color: yellow;">${text.substring(start, end)}</span>`;
+      } else {
+        result += text[currentIndex];
+        currentIndex++;
+      }
+    }
 
-      // Append unchanged text before the word
-      result += originalText.substring(currentIndex, startIndex);
-
-      // Wrap the word in a span with a random background color
-      result += `<span style="background-color: #${Math.floor(Math.random() * 16777215).toString(16)}">${word}</span>`;
-
-      // Move the current index past this word
-      currentIndex = endIndex;
-    });
-
-    // Append any remaining unchanged text after the last word
-    result += originalText.substring(currentIndex);
-
-    // Update the container with the wrapped words
-    container.innerHTML = result;
+    return result;
   };
 
-  // Wrap removed and added words in respective containers
-  wrapWords(textContainer1, removed, text1);
-  wrapWords(textContainer2, added, text2);
+// Wrap removed characters in text1
+const wrappedText1 = wrapCharacters(text1, diffOutput.removed);
+textContainer1.innerHTML = wrappedText1;
+
+// Wrap added characters in text2
+const wrappedText2 = wrapCharacters(text2, diffOutput.added);
+textContainer2.innerHTML = wrappedText2;
 }
+
 
 function formHandler() {
   document.getElementById(HASH_FORM_ID).addEventListener('submit', function(event) {
@@ -181,7 +214,7 @@ function formHandler() {
     document.getElementById(PARAGRAPH2_ID).textContent = inputText2;
 
     // Perform word-level diff
-    const diffOutput = diff(inputText1, inputText2);
+    const diffOutput = diffTexts(inputText1, inputText2);
 
     // Highlight the changes in the paragraphs
     wrapIndexesWithColors(PARAGRAPH1_ID, PARAGRAPH2_ID, diffOutput);
