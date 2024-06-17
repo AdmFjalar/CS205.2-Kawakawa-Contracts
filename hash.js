@@ -4,19 +4,6 @@ const PARAGRAPH1_ID = 'paragraph01';
 const PARAGRAPH2_ID = 'paragraph02';
 const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
-var COLOR_INDEX; //index to use for both color arrays
-var lastColors=[];//records 
-var SOLID_COLORS=[
-"rgb(36,113,164)",
-"rgb(13,206,164)",
-"rgb(127,29,218)"];
-
-var GRAD_COLORS=[
-  "linear-gradient(rgb(36,113,164), rgb(18,56,82))",
-  "linear-gradient(rgb(13,206,164), rgb(6,103,82))",
-  "linear-gradient(rgb(127,29,218), rgb(63,15,109))"
-];
-
 
 var COLOR_INDEX; // Index to use for both color arrays
 var lastColors = []; // Array to store recently used indices, acting as a fixed-size queue
@@ -55,16 +42,11 @@ function getRandomColors() {
     return randomIndex; // Return the random index
 }
 
-
-=======
-
 var BACKGROUND_COLORS = [
   "rgb(36,113,164)",
   "rgb(13,206,164)",
   "rgb(127,29,218)"
 ];
-
-let lastColors = [];
 
 function getRandomColors() {
   var randomIndex;
@@ -232,7 +214,7 @@ function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
         }
         const end = currentIndex;
         // Wrap sequence of changes in span tag
-        result += `<span style="background-color: yellow;">${text.substring(start, end)}</span>`;
+        result += `<span style="background-color: ${SOLID_COLORS[1]};">${text.substring(start, end)}</span>`;
       } else {
         result += text[currentIndex];
         currentIndex++;
