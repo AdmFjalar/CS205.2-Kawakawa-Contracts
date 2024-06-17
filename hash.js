@@ -1,6 +1,7 @@
 const INPUT_TEXT1_ID = 'Document01';
 const INPUT_TEXT2_ID = 'Document02';
-const IGNORE_INDICES_ID = 'ignoreIndices';
+const PARAGRAPH1_ID = 'paragraph01';
+const PARAGRAPH2_ID = 'paragraph02';
 const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
 var COLOR_INDEX; //index to use for both color arrays
@@ -55,9 +56,80 @@ function getNewColorIndex() {
 }
 
 
+=======
 
-function generateIgnoreBox(){ 
+var BACKGROUND_COLORS = [
+  "rgb(36,113,164)",
+  "rgb(13,206,164)",
+  "rgb(127,29,218)"
+];
 
+let lastColors = [];
+
+function getRandomColors() {
+  var randomIndex;
+  do {
+    randomIndex = Math.floor(Math.random() * BACKGROUND_COLORS.length);
+  } while (lastColors.includes(randomIndex));
+  lastColors.push(randomIndex);
+  if (lastColors.length > BACKGROUND_COLORS.length) {
+    lastColors.shift();
+  }
+  return BACKGROUND_COLORS[randomIndex];
+}
+
+function darkenColor(rgb, percent) {
+  const [r, g, b] = rgb.match(/\d+/g).map(Number);
+
+  const factor = 1 - percent / 100;
+  const newR = Math.max(0, Math.min(255, Math.floor(r * factor)));
+  const newG = Math.max(0, Math.min(255, Math.floor(g * factor)));
+  const newB = Math.max(0, Math.min(255, Math.floor(b * factor)));
+  return `rgb(${newR},${newG},${newB})`;
+}
+
+function createGradient(rgb) {
+  const darkerColor = darkenColor(rgb, 50);
+  return `linear-gradient(${rgb}, ${darkerColor})`;
+}
+
+function generateIgnoreBox() {
+  //get orginal element
+  var original = document.getElementById('ignoreBox01');
+  //clone element and it's content
+  var clone = original.cloneNode(true);
+  //set new attributes like ID and color
+  clone.id = 'ignoreBox02';
+  //get a new color
+  var newColor = getRandomColors(); //returns a single colour from the list
+  var newGradient = createGradient(newColor);//turns this into a gradient
+
+  clone.style.background = newGradient;
+
+  //append
+  var targetDiv = document.getElementById('mismatchCenterBox01');
+  targetDiv.appendChild(clone);
+}
+
+function toggleDisplay(testState) {
+  var blankCenterBox = document.querySelector('.blankCenterBox');
+  var matchCenterBox = document.querySelector('.matchCenterBox');
+  var mismatchCenterBox = document.querySelector('.mismatchCenterBox');
+
+  if (testState === "mismatch") {
+    blankCenterBox.style.display = 'none';
+    matchCenterBox.style.display = 'none';
+    mismatchCenterBox.style.display = 'block';
+  } else if (testState === "match") {
+    blankCenterBox.style.display = 'none';
+    matchCenterBox.style.display = 'block';
+    mismatchCenterBox.style.display = 'none';
+  } else {
+    blankCenterBox.style.display = 'block';
+    matchCenterBox.style.display = 'none';
+    mismatchCenterBox.style.display = 'none';
+  }
+}
     //get orginal element
     var original=document.getElementById('ignoreBox01');
     //clone element and it's content
@@ -70,156 +142,157 @@ function generateIgnoreBox(){
 
     clone.style.background=GRAD_COLORS[COLOR_INDEX]; 
 
-
-    //append
-    var targetDiv=document.getElementById('mismatchCenterBox01');
-    targetDiv.appendChild(clone);
-
-
-}
-
-
-function toggleDisplay(testState){ //toggles visibility of centre div section
-    var blankCenterBox = document.querySelector('.blankCenterBox');
-    var matchCenterBox = document.querySelector('.matchCenterBox');
-    var mismatchCenterBox = document.querySelector('.mismatchCenterBox');
-    
-    if (testState === "mismatch"){
-        blankCenterBox.style.display='none';
-        matchCenterBox.style.display='none';
-        mismatchCenterBox.style.display='block'; 
-    }
-    else if(testState=== "match" ){
-        blankCenterBox.style.display='none';
-        matchCenterBox.style.display='block';
-        mismatchCenterBox.style.display='none'; 
-    }
-    else
-    {
-        blankCenterBox.style.display='block';
-        matchCenterBox.style.display='none';
-        mismatchCenterBox.style.display='none'; 
-    }
-    }
-
 function calculateHash(text) {
-    return sha3_512(text);
+  return sha3_512(text);
 }
 
-function ignoreText(text, ignoreIndicesInput) {
-    const ignoreIndices = ignoreIndicesInput.split(',').map(Number).filter(index => !isNaN(index));
-    return text.split('').filter((char, index) => !ignoreIndices.includes(index)).join('');
+function compareTexts(text1, text2) {
+  return calculateHash(text1) === calculateHash(text2);
 }
 
-function compareTexts(text1, text2) {    
-        const match = calculateHash(text1) === calculateHash(text2);
-        
-        return match;
-}
 
-function diff(text1, text2) {
-    const removed = [];
-    const added = [];
-  
-    let i = 0;
-    let j = 0;
-  
-    while (i < text1.length && j < text2.length) {
-      if (text1[i] === text2[j]) {
-        i++;
-        j++;
-      } else {
-        removed.push(i);
-        j++;
-        while (j < text2.length && text1[i] !== text2[j]) {
-          added.push(j);
-          j++;
-        }
-        i++;
+/**
+ * Performs a word-level diff between two texts and logs the indexes of added and removed words.
+ * @param {string} text1 The first text.
+ * @param {string} text2 The second text.
+ * @returns {Object} An object containing arrays of removed and added word indexes.
+ */
+function diffTexts(text1, text2) {
+  // Step 1: Compute the longest common subsequence (LCS) using dynamic programming
+
+  // Initialize a 2D array to store the length of LCS for substrings
+  const dp = [];
+  const len1 = text1.length;
+  const len2 = text2.length;
+
+  for (let i = 0; i <= len1; i++) {
+      dp[i] = [];
+      for (let j = 0; j <= len2; j++) {
+          if (i === 0 || j === 0) {
+              dp[i][j] = 0;
+          } else if (text1[i - 1] === text2[j - 1]) {
+              dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+              dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+          }
       }
-    }
-  
-    while (j < text2.length) {
-      added.push(j);
-      j++;
-    }
-  
-    return { removed, added };
   }
 
-  function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
-    const textContainer1 = document.getElementById(textContainer1Id);
-    const textContainer2 = document.getElementById(textContainer2Id);
-    const text1 = textContainer1.textContent;
-    const text2 = textContainer2.textContent;
-  
-    const removed = [];
-    const added = [];
-  
-    let start = -1;
-    let end = -1;
-  
-    for (let i = 0; i < diffOutput.length; i++) {
-      const [type, text] = diffOutput[i];
-      if (type === 0) {
-        for (let j = 0; j < text.length; j++) {
-          removed.push(text1[j]);
-          added.push(text2[j]);
-        }
-      } else if (type === -1) {
-        for (let j = 0; j < text.length; j++) {
-          removed.push(text1[start + j]);
-        }
-      } else if (type === 1) {
-        for (let j = 0; j < text.length; j++) {
-          added.push(text2[start + j]);
-        }
+  // Step 2: Trace back to find the differences
+  let i = len1;
+  let j = len2;
+  const diff = {
+      removed: [],
+      added: []
+  };
+
+  while (i > 0 || j > 0) {
+      if (i > 0 && j > 0 && text1[i - 1] === text2[j - 1]) {
+          // Characters are the same, move diagonally up-left
+          i--;
+          j--;
+      } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+          // Character in text2 is added
+          diff.added.unshift(j - 1); // Store index of added character
+          j--;
+      } else if (i > 0 && (j === 0 || dp[i][j - 1] < dp[i - 1][j])) {
+          // Character in text1 is removed
+          diff.removed.unshift(i - 1); // Store index of removed character
+          i--;
       }
-      start += text.length;
-    }
-  
-    textContainer1.innerHTML = removed.map((char, index) => {
-      const id = `highlight-${Math.random().toString(36).substring(2, 15)}`;
-      const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-      return `<span id="${id}" style="background-color: ${color}">${char}</span>`;
-    }).join('');
-  
-    textContainer2.innerHTML = added.map((char, index) => {
-      const id = `highlight-${Math.random().toString(36).substring(2, 15)}`;
-      const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-      return `<span id="${id}" style="background-color: ${color}">${char}</span>`;
-    }).join('');
+  }
+
+  console.log(diff);
+
+  return diff;
 }
+
+// Function to wrap characters in text with specified highlights
+function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
+  const textContainer1 = document.getElementById(textContainer1Id);
+  const textContainer2 = document.getElementById(textContainer2Id);
+  const text1 = textContainer1?.textContent?.trim() || '';
+  const text2 = textContainer2?.textContent?.trim() || '';
+
+  // Function to wrap characters with colored spans
+  const wrapCharacters = (text, changes) => {
+    if (!text || !changes || changes.length === 0) {
+      return text; // Return original text if there are no changes
+    }
+
+    let result = '';
+    let currentIndex = 0;
+
+    while (currentIndex < text.length) {
+      if (changes.includes(currentIndex)) {
+        const start = currentIndex;
+        // Find end of the sequence of changes
+        while (currentIndex < text.length && changes.includes(currentIndex)) {
+          currentIndex++;
+        }
+        const end = currentIndex;
+        // Wrap sequence of changes in span tag
+        result += `<span style="background-color: yellow;">${text.substring(start, end)}</span>`;
+      } else {
+        result += text[currentIndex];
+        currentIndex++;
+      }
+    }
+
+    return result;
+  };
+
+// Wrap removed characters in text1
+const wrappedText1 = wrapCharacters(text1, diffOutput.removed);
+textContainer1.innerHTML = wrappedText1;
+
+// Wrap added characters in text2
+const wrappedText2 = wrapCharacters(text2, diffOutput.added);
+textContainer2.innerHTML = wrappedText2;
+}
+
 
 function formHandler() {
-    document.getElementById(HASH_FORM_ID).addEventListener('submit', function(event) {
-        event.preventDefault();
+  document.getElementById(HASH_FORM_ID).addEventListener('submit', function(event) {
+    event.preventDefault();
 
-        const inputText1 = document.getElementById(INPUT_TEXT1_ID).value;
-        const inputText2 = document.getElementById(INPUT_TEXT2_ID).value;
+    const inputText1 = document.getElementById(INPUT_TEXT1_ID).value;
+    const inputText2 = document.getElementById(INPUT_TEXT2_ID).value;
 
-        //const ignoreIndicesInput = document.getElementById(IGNORE_INDICES_ID).value;
-        //const ignoreIndices = ignoreIndicesInput.split(',').map(Number).filter(index => !isNaN(index));
+    const result = compareTexts(inputText1, inputText2);
 
-        const result = compareTexts(inputText1, inputText2/*, ignoreIndices*/);
-        let resultText = result.match ? "Texts match" : "Texts do not match";/*`Texts do not match at indices: ${result.nonMatchingIndices.join(', ')}`*/
-        
-        if (result){
+    document.getElementById(PARAGRAPH1_ID).innerText = inputText1;
+    document.getElementById(PARAGRAPH2_ID).innerText = inputText2;
+
+        document.getElementById(INPUT_TEXT1_ID).style.display = 'none';
+        document.getElementById(INPUT_TEXT2_ID).style.display = 'none';
+
+        document.getElementById(PARAGRAPH1_ID).style.display = 'block';
+        document.getElementById(PARAGRAPH2_ID).style.display = 'block';
+
+        if (result) {
             toggleDisplay("match");
-        }
-        
-        else{
+        } else {
             toggleDisplay("mismatch");
-            generateIgnoreBox();
-            
         }
-        
 
-        
-        //const result = compareTexts(inputText1, inputText2);
-        //var diffOutput = diff(inputText1, inputText2);
-        //wrapIndexesWithColors(INPUT_TEXT1_ID, INPUT_TEXT2_ID, diffOutput);
-    });
+    document.getElementById(PARAGRAPH1_ID).textContent = inputText1;
+    document.getElementById(PARAGRAPH2_ID).textContent = inputText2;
 
+    // Perform word-level diff
+    const diffOutput = diffTexts(inputText1, inputText2);
+
+    // Highlight the changes in the paragraphs
+    wrapIndexesWithColors(PARAGRAPH1_ID, PARAGRAPH2_ID, diffOutput);
+  });
 }
-formHandler();
+
+function hideInitialElements() {
+  document.querySelector('.matchCenterBox').style.display = 'none';
+  document.querySelector('.mismatchCenterBox').style.display = 'none';
+}
+
+window.onload = function() {
+  hideInitialElements();
+  formHandler();
+};
