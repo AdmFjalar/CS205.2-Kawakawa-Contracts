@@ -4,19 +4,6 @@ const PARAGRAPH1_ID = 'paragraph01';
 const PARAGRAPH2_ID = 'paragraph02';
 const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
-var COLOR_INDEX; //index to use for both color arrays
-var lastColors=[];//records 
-var SOLID_COLORS=[
-"rgb(36,113,164)",
-"rgb(13,206,164)",
-"rgb(127,29,218)"];
-
-var GRAD_COLORS=[
-  "linear-gradient(rgb(36,113,164), rgb(18,56,82))",
-  "linear-gradient(rgb(13,206,164), rgb(6,103,82))",
-  "linear-gradient(rgb(127,29,218), rgb(63,15,109))"
-];
-
 
 var COLOR_INDEX; // Index to use for both color arrays
 var lastColors = []; // Array to store recently used indices, acting as a fixed-size queue
@@ -52,45 +39,7 @@ function getNewColorIndex() {
     lastColors.push(randomIndex); // Add the new randomIndex to lastColors
     
     COLOR_INDEX = randomIndex; // Update COLOR_INDEX with the current randomIndex
-    
-}
-
-
-=======
-
-var BACKGROUND_COLORS = [
-  "rgb(36,113,164)",
-  "rgb(13,206,164)",
-  "rgb(127,29,218)"
-];
-
-let lastColors = [];
-
-function getRandomColors() {
-  var randomIndex;
-  do {
-    randomIndex = Math.floor(Math.random() * BACKGROUND_COLORS.length);
-  } while (lastColors.includes(randomIndex));
-  lastColors.push(randomIndex);
-  if (lastColors.length > BACKGROUND_COLORS.length) {
-    lastColors.shift();
-  }
-  return BACKGROUND_COLORS[randomIndex];
-}
-
-function darkenColor(rgb, percent) {
-  const [r, g, b] = rgb.match(/\d+/g).map(Number);
-
-  const factor = 1 - percent / 100;
-  const newR = Math.max(0, Math.min(255, Math.floor(r * factor)));
-  const newG = Math.max(0, Math.min(255, Math.floor(g * factor)));
-  const newB = Math.max(0, Math.min(255, Math.floor(b * factor)));
-  return `rgb(${newR},${newG},${newB})`;
-}
-
-function createGradient(rgb) {
-  const darkerColor = darkenColor(rgb, 50);
-  return `linear-gradient(${rgb}, ${darkerColor})`;
+    return COLOR_INDEX;
 }
 
 function generateIgnoreBox() {
@@ -100,11 +49,9 @@ function generateIgnoreBox() {
   var clone = original.cloneNode(true);
   //set new attributes like ID and color
   clone.id = 'ignoreBox02';
-  //get a new color
-  var newColor = getRandomColors(); //returns a single colour from the list
-  var newGradient = createGradient(newColor);//turns this into a gradient
 
-  clone.style.background = newGradient;
+  getNewColorIndex();//Remove this when text colors are working
+  clone.style.background = SOLID_COLORS[COLOR_INDEX];
 
   //append
   var targetDiv = document.getElementById('mismatchCenterBox01');
@@ -130,17 +77,6 @@ function toggleDisplay(testState) {
     mismatchCenterBox.style.display = 'none';
   }
 }
-    //get orginal element
-    var original=document.getElementById('ignoreBox01');
-    //clone element and it's content
-    var clone=original.cloneNode(true);
-    //set new attributes like ID and color
-    clone.id ='ignoreBox02';
-    //get a new color
-    getNewColorIndex(); //sets a new color index
-    
-
-    clone.style.background=GRAD_COLORS[COLOR_INDEX]; 
 
 function calculateHash(text) {
   return sha3_512(text);
