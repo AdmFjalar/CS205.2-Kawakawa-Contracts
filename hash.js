@@ -3,41 +3,58 @@ const INPUT_TEXT2_ID = 'Document02';
 const IGNORE_INDICES_ID = 'ignoreIndices';
 const HASH_FORM_ID = 'hashForm';
 const HASH_RESULT_ID = 'hashResult';
-
-var BACKGROUND_COLORS =[
+var COLOR_INDEX; //index to use for both color arrays
+var lastColors=[];//records 
+var SOLID_COLORS=[
 "rgb(36,113,164)",
 "rgb(13,206,164)",
 "rgb(127,29,218)"];
 
-let lastColors=[];
+var GRAD_COLORS=[
+  "linear-gradient(rgb(36,113,164), rgb(18,56,82))",
+  "linear-gradient(rgb(13,206,164), rgb(6,103,82))",
+  "linear-gradient(rgb(127,29,218), rgb(63,15,109))"
+];
 
-function getRandomColors(){ //fetches an RGB code from the array; dosen't re-use any colors till entire array is used
+
+var COLOR_INDEX; // Index to use for both color arrays
+var lastColors = []; // Array to store recently used indices, acting as a fixed-size queue
+var SOLID_COLORS = [
+    "rgb(36,113,164)",
+    "rgb(13,206,164)",
+    "rgb(127,29,218)",
+    "rgb(210,235,52)",
+    "rgb(137,229,245)"
+];
+
+var GRAD_COLORS = [
+    "linear-gradient(rgb(36,113,164), rgb(18,56,82))",
+    "linear-gradient(rgb(13,206,164), rgb(6,103,82))",
+    "linear-gradient(rgb(127,29,218), rgb(63,15,109))",
+    "linear-gradient(rgb(210,235,52), rgb(105,117,26))",
+    "linear-gradient(rgb(137,229,245), rgb(68,115,122))"
+];
+
+function getRandomColors() {
     var randomIndex;
-    do{
-        randomIndex =Math.floor(Math.random()*BACKGROUND_COLORS.length);
+    
+    // If lastColors array is full, remove the oldest entry
+    if (lastColors.length === Math.ceil(SOLID_COLORS.length / 2)) {
+        lastColors.shift(); 
     }
-    while (lastColors.includes(randomIndex));
-    lastColors.push(randomIndex);
-    if (lastColors.length>BACKGROUND_COLORS.length){
-        lastColors.shift();
-    }
-    return BACKGROUND_COLORS[randomIndex];
+    
+    // Generate a random index that hasn't been used recently
+    do {
+        randomIndex = Math.floor(Math.random() * SOLID_COLORS.length);
+    } while (lastColors.includes(randomIndex));
+    
+    lastColors.push(randomIndex); // Add the new randomIndex to lastColors
+    
+    COLOR_INDEX = randomIndex; // Update COLOR_INDEX with the current randomIndex
+    return randomIndex; // Return the random index
 }
 
-function darkenColor(rgb,percent){ //darkens RGB by specified percentage and returns new rgb code
-    const[r,g,b]=rgb.match(/\d+/g).map(Number);
 
-    const factor=1-percent/100;
-    const newR=Math.max(0,Math.min(255,Math.floor(r*factor)));
-    const newG=Math.max(0,Math.min(255,Math.floor(g*factor)));
-    const newB=Math.max(0,Math.min(255,Math.floor(b*factor)));
-    return "rgb(${newR},${newG},${newB})";
-}
-
-function createGradient(rgb){ //takes an RGB, generates a darker version and creates a gradient 
-    const darkerColor=darkenColor(rgb, 50);
-    return "linear-gradient(${rbg}, ${darkerColor})";
-}
 
 function generateIgnoreBox(){ 
 
@@ -48,11 +65,10 @@ function generateIgnoreBox(){
     //set new attributes like ID and color
     clone.id ='ignoreBox02';
     //get a new color
-    var newColor=getRandomColors(); //returns a single colour from the list
-    var newGradient=createGradient(newColor);//turns this into a gradient
+    COLOR_INDEX=getRandomColors(); //gets an index number for color
     
 
-    clone.style.background=newGradient;
+    clone.style.background=GRAD_COLORS[COLOR_INDEX]; 
 
 
     //append
