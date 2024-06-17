@@ -35,7 +35,7 @@ var GRAD_COLORS = [
     "linear-gradient(rgb(137,229,245), rgb(68,115,122))"
 ];
 
-function getRandomColors() {
+function getNewColorIndex() {
     var randomIndex;
     
     // If lastColors array is full, remove the oldest entry
@@ -51,7 +51,7 @@ function getRandomColors() {
     lastColors.push(randomIndex); // Add the new randomIndex to lastColors
     
     COLOR_INDEX = randomIndex; // Update COLOR_INDEX with the current randomIndex
-    return randomIndex; // Return the random index
+    
 }
 
 
@@ -65,7 +65,7 @@ function generateIgnoreBox(){
     //set new attributes like ID and color
     clone.id ='ignoreBox02';
     //get a new color
-    COLOR_INDEX=getRandomColors(); //gets an index number for color
+    getNewColorIndex(); //sets a new color index
     
 
     clone.style.background=GRAD_COLORS[COLOR_INDEX]; 
