@@ -3,7 +3,6 @@ const INPUT_TEXT2_ID = 'Document02';
 const PARAGRAPH1_ID = 'paragraph01';
 const PARAGRAPH2_ID = 'paragraph02';
 const HASH_FORM_ID = 'hashForm';
-const HASH_RESULT_ID = 'hashResult';
 
 var COLOR_INDEX; // Index to use for both color arrays
 var lastColors = []; // Array to store recently used indices, acting as a fixed-size queue
@@ -23,7 +22,7 @@ var GRAD_COLORS = [
     "linear-gradient(rgb(137,229,245), rgb(68,115,122))"
 ];
 
-function getRandomColors() {
+function getNewColorIndex() {
     var randomIndex;
     
     // If lastColors array is full, remove the oldest entry
@@ -39,40 +38,7 @@ function getRandomColors() {
     lastColors.push(randomIndex); // Add the new randomIndex to lastColors
     
     COLOR_INDEX = randomIndex; // Update COLOR_INDEX with the current randomIndex
-    return randomIndex; // Return the random index
-}
-
-var BACKGROUND_COLORS = [
-  "rgb(36,113,164)",
-  "rgb(13,206,164)",
-  "rgb(127,29,218)"
-];
-
-function getRandomColors() {
-  var randomIndex;
-  do {
-    randomIndex = Math.floor(Math.random() * BACKGROUND_COLORS.length);
-  } while (lastColors.includes(randomIndex));
-  lastColors.push(randomIndex);
-  if (lastColors.length > BACKGROUND_COLORS.length) {
-    lastColors.shift();
-  }
-  return BACKGROUND_COLORS[randomIndex];
-}
-
-function darkenColor(rgb, percent) {
-  const [r, g, b] = rgb.match(/\d+/g).map(Number);
-
-  const factor = 1 - percent / 100;
-  const newR = Math.max(0, Math.min(255, Math.floor(r * factor)));
-  const newG = Math.max(0, Math.min(255, Math.floor(g * factor)));
-  const newB = Math.max(0, Math.min(255, Math.floor(b * factor)));
-  return `rgb(${newR},${newG},${newB})`;
-}
-
-function createGradient(rgb) {
-  const darkerColor = darkenColor(rgb, 50);
-  return `linear-gradient(${rgb}, ${darkerColor})`;
+    return COLOR_INDEX;
 }
 
 function generateIgnoreBox() {
@@ -183,9 +149,6 @@ function diffTexts(text1, text2) {
           i--;
       }
   }
-
-  console.log(diff);
-
   return diff;
 }
 
@@ -214,7 +177,7 @@ function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
         }
         const end = currentIndex;
         // Wrap sequence of changes in span tag
-        result += `<span style="background-color: ${SOLID_COLORS[1]};">${text.substring(start, end)}</span>`;
+        result += `<span style="background-color: ${SOLID_COLORS[getNewColorIndex()]};">${text.substring(start, end)}</span>`;
       } else {
         result += text[currentIndex];
         currentIndex++;
