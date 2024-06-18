@@ -49,7 +49,7 @@ function generateIgnoreBox() {
   //set new attributes like ID and color
   clone.id = 'ignoreBox02';
   //get a new color
-  var newColor = getRandomColors(); //returns a single colour from the list
+  var newColor = getNewColorIndex(); //returns a single colour from the list
   var newGradient = createGradient(newColor);//turns this into a gradient
 
   clone.style.background = newGradient;
@@ -85,7 +85,7 @@ function toggleDisplay(testState) {
     //set new attributes like ID and color
     clone.id ='ignoreBox02';
     //get a new color
-    COLOR_INDEX=getRandomColors(); //gets an index number for color
+    COLOR_INDEX=getNewColorIndex(); //gets an index number for color
     
 
     clone.style.background=GRAD_COLORS[COLOR_INDEX]; 
