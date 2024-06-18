@@ -42,17 +42,18 @@ function getNewColorIndex() {
     return COLOR_INDEX;
 }
 
-function generateIgnoreBox() {
+function generateIgnoreBox(ID) {
   //get orginal element
-  var original = document.getElementById('ignoreBox01');
+  var original = document.getElementById('ignoreBoxTemplate');
   //clone element and it's content
   var clone = original.cloneNode(true);
   //set new attributes like ID and color
-  clone.id = 'ignoreBox02';
+  clone.id = 'ignoreBox${ID}';
 
-  getNewColorIndex();//Remove this when text colors are working
-  clone.style.background = SOLID_COLORS[COLOR_INDEX];
-
+  //getNewColorIndex();//Remove this when text colors are working
+  clone.style.background = GRAD_COLORS[COLOR_INDEX];
+  //set display from hidden to block
+  clone.style.display=block;
   //append
   var targetDiv = document.getElementById('mismatchCenterBox01');
   targetDiv.appendChild(clone);
