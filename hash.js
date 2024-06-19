@@ -3,6 +3,7 @@ const INPUT_TEXT2_ID = 'Document02';
 const PARAGRAPH1_ID = 'paragraph01';
 const PARAGRAPH2_ID = 'paragraph02';
 const HASH_FORM_ID = 'hashForm';
+const MISMATCH_CENTER_ID = 'mismatchCenterBox01';
 
 var COLOR_INDEX; // Index to use for both color arrays
 var lastColors = []; // Array to store recently used indices, acting as a fixed-size queue
@@ -57,7 +58,7 @@ function generateIgnoreBox(id, text) {
   clone.style.background = newColor;
 
   //append
-  var targetDiv = document.getElementById('mismatchCenterBox01');
+  var targetDiv = document.getElementById(MISMATCH_CENTER_ID);
   targetDiv.appendChild(clone);
 }
 
@@ -220,6 +221,13 @@ function formHandler() {
   document.getElementById(HASH_FORM_ID).addEventListener('submit', function(event) {
     event.preventDefault();
 
+    const container = document.getElementById(MISMATCH_CENTER_ID); // Replace 'container_id' with the actual ID of your container element
+
+    // Remove all child elements except the first one
+    const children = Array.from(container.children);
+    if (children.length > 3) {
+      children.slice(3).forEach(child => container.removeChild(child));
+    }
     const inputText1 = document.getElementById(INPUT_TEXT1_ID).value;
     const inputText2 = document.getElementById(INPUT_TEXT2_ID).value;
 
