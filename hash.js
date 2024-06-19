@@ -41,18 +41,20 @@ function getNewColorIndex() {
     return COLOR_INDEX;
 }
 
-function generateIgnoreBox() {
+function generateIgnoreBox(id, text) {
   //get orginal element
   var original = document.getElementById('ignoreBox01');
   //clone element and it's content
   var clone = original.cloneNode(true);
+  clone.style.display = 'block';
   //set new attributes like ID and color
-  clone.id = 'ignoreBox02';
+  clone.id = 'ignorebox-' + id;
+  clone.getElementsByTagName('p')[0].innerHTML = text;
   //get a new color
-  var newColor = getNewColorIndex(); //returns a single colour from the list
-  var newGradient = createGradient(newColor);//turns this into a gradient
+  var newColor = SOLID_COLORS[COLOR_INDEX]; //returns a single colour from the list
+  //var newGradient = createGradient(newColor);//turns this into a gradient
 
-  clone.style.background = newGradient;
+  clone.style.background = newColor;
 
   //append
   var targetDiv = document.getElementById('mismatchCenterBox01');
@@ -176,8 +178,15 @@ function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
           currentIndex++;
         }
         const end = currentIndex;
+        
+        // Generate a random ID for the highlight span
+        const id = Math.random().toString(36).substring(7);
+
         // Wrap sequence of changes in span tag
-        result += `<span style="background-color: ${SOLID_COLORS[getNewColorIndex()]};">${text.substring(start, end)}</span>`;
+        result += `<span id="highlight-${id}" style="background-color: ${SOLID_COLORS[getNewColorIndex()]};">${text.substring(start, end)}</span>`;
+        generateIgnoreBox(id, text.substring(start, end));
+
+        storeHighlight(id, start, end);
       } else {
         result += text[currentIndex];
         currentIndex++;
@@ -196,6 +205,16 @@ const wrappedText2 = wrapCharacters(text2, diffOutput.added);
 textContainer2.innerHTML = wrappedText2;
 }
 
+// Function to store the highlight ID and index range in a data structure
+const storeHighlight = (id, start, end) => {
+  // Create a data structure to store the highlights
+  const highlights = {};
+
+  // Store the ID and index range in the data structure
+  highlights[id] = { start, end };
+
+  return highlights;
+};
 
 function formHandler() {
   document.getElementById(HASH_FORM_ID).addEventListener('submit', function(event) {
