@@ -52,10 +52,20 @@ function generateIgnoreBox(id, text) {
   clone.id = 'ignorebox-' + id;
   clone.getElementsByTagName('p')[0].innerHTML = text;
   //get a new color
-  var newColor = SOLID_COLORS[COLOR_INDEX]; //returns a single colour from the list
-  //var newGradient = createGradient(newColor);//turns this into a gradient
+  var newColor = GRAD_COLORS[COLOR_INDEX]; //gets the gradient color to match the text highlight
+  
 
   clone.style.background = newColor;
+
+  //find checkbox and toggle label within the cloned template
+  var clonedCheckBox=clone.querySelector('.toggle');
+  var clonedToggleLabel=clone.querySelector('.toggleLabel')
+  //assign unique IDs to checkbox and togglelabel
+  var checkboxID='ignore'+id;
+  clonedCheckBox.id=checkboxID;
+  clonedToggleLabel.setAttribute('for',checkboxID);
+  
+
 
   //append
   var targetDiv = document.getElementById(MISMATCH_CENTER_ID);
@@ -81,18 +91,7 @@ function toggleDisplay(testState) {
     mismatchCenterBox.style.display = 'none';
   }
 }
-    //get orginal element
-    var original=document.getElementById('ignoreBox01');
-    //clone element and it's content
-    var clone=original.cloneNode(true);
-    //set new attributes like ID and color
-    clone.id ='ignoreBox02';
-    //get a new color
-    COLOR_INDEX=getNewColorIndex(); //gets an index number for color
-    
-
-    clone.style.background=GRAD_COLORS[COLOR_INDEX]; 
-
+   
 function calculateHash(text) {
   return sha3_512(text);
 }

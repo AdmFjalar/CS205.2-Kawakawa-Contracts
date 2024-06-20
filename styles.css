@@ -170,6 +170,7 @@
 
 .toggle:checked + .toggleLabel {
     background-color: rgb(243, 9, 9);
+    margin: 10px;
 }
 
 .ball {
