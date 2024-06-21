@@ -4,6 +4,10 @@ const PARAGRAPH1_ID = 'paragraph01';
 const PARAGRAPH2_ID = 'paragraph02';
 const HASH_FORM_ID = 'hashForm';
 const MISMATCH_CENTER_ID = 'mismatchCenterBox01';
+const IGNORE_GRAY = 'rgb(217, 215, 210)';
+const MATCH_GREEN = 'linear-gradient(rgb(32, 239, 32), rgb(24, 179, 24))'
+const MISMATCH_RED = 'linear-gradient(rgb(243, 9, 9), rgb(174, 10, 10))'
+const ID_COLOR_MAP = {};
 
 var COLOR_INDEX; // Index to use for both color arrays
 var lastColors = []; // Array to store recently used indices, acting as a fixed-size queue
@@ -53,7 +57,7 @@ function generateIgnoreBox(id, text) {
   clone.getElementsByTagName('p')[0].innerHTML = text;
   //get a new color
   var newColor = GRAD_COLORS[COLOR_INDEX]; //gets the gradient color to match the text highlight
-  
+  ID_COLOR_MAP[id] = newColor;
 
   clone.style.background = newColor;
 
@@ -255,6 +259,28 @@ function formHandler() {
 
     // Highlight the changes in the paragraphs
     wrapIndexesWithColors(PARAGRAPH1_ID, PARAGRAPH2_ID, diffOutput);
+
+    const ignoreBoxes = document.querySelectorAll('.ignoreBox:not(#ignoreBox01)');
+
+    ignoreBoxes.forEach(ignoreBox => {
+      const toggle = ignoreBox.querySelector('.toggle');
+    
+      toggle.addEventListener('click', () => {
+        const sharedID = ignoreBox.id.replace('ignorebox-', '');
+        const highlightId = `highlight-${sharedID}`;
+        const highlight = document.getElementById(highlightId);
+        console.log("Hello");
+        if (!toggle.checked) {
+          // Ignore box is turned on
+          highlight.style.background = ID_COLOR_MAP[sharedID];
+          ignoreBox.style.background = ID_COLOR_MAP[sharedID];
+        } else {
+          // Ignore box is turned off
+          highlight.style.background = IGNORE_GRAY;
+          ignoreBox.style.background = IGNORE_GRAY;
+        }
+      });
+    });    
   });
 }
 
