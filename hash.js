@@ -4,6 +4,7 @@ const PARAGRAPH1_ID = 'paragraph01';
 const PARAGRAPH2_ID = 'paragraph02';
 const HASH_FORM_ID = 'hashForm';
 const MISMATCH_CENTER_ID = 'mismatchCenterBox01';
+const MISMATCH_TEXT_ID = 'mismatchText';
 const IGNORE_GRAY = 'rgb(217, 215, 210)';
 const MATCH_GREEN = 'linear-gradient(rgb(32, 239, 32), rgb(24, 179, 24))'
 const MISMATCH_RED = 'linear-gradient(rgb(243, 9, 9), rgb(174, 10, 10))'
@@ -279,6 +280,19 @@ function formHandler() {
           highlight.style.background = IGNORE_GRAY;
           ignoreBox.style.background = IGNORE_GRAY;
         }
+
+        const allTogglesOn = Array.from(ignoreBoxes).every(ignoreBox => ignoreBox.querySelector('.toggle').checked);
+
+        if (allTogglesOn) {
+          // Change the background color of #mismatchCenterBox01 to MATCH_GREEN
+          document.getElementById(MISMATCH_CENTER_ID).style.background = MATCH_GREEN;
+          document.getElementById(MISMATCH_TEXT_ID).innerHTML = "MATCH";
+        } else {
+          // Reset the background color of #mismatchCenterBox01
+          document.getElementById(MISMATCH_CENTER_ID).style.background = MISMATCH_RED;
+          document.getElementById(MISMATCH_TEXT_ID).innerHTML = "MISMATCH";
+        }
+    
       });
     });    
   });
