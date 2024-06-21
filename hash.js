@@ -202,10 +202,12 @@ function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
   };
 
 // Wrap removed characters in text1
+document.getElementById(MISMATCH_CENTER_ID).innerHTML += '<h3>REMOVED</h3>';
 const wrappedText1 = wrapCharacters(text1, diffOutput.removed);
 textContainer1.innerHTML = wrappedText1;
 
 // Wrap added characters in text2
+document.getElementById(MISMATCH_CENTER_ID).innerHTML += '<h3>ADDED</h3>';
 const wrappedText2 = wrapCharacters(text2, diffOutput.added);
 textContainer2.innerHTML = wrappedText2;
 }
