@@ -325,12 +325,38 @@ const storeHighlight = (id, start, end) => {
 
 
 /**
+ * Updates the mismatch box on the page.
+ * @param {boolean} mismatchesIgnored - Indicates whether mismatches are ignored.
+ */
+function updateMismatchBox(mismatchesIgnored) {
+  // Get the mismatch center box element
+  const mismatchBox = document.getElementById(mismatchCenterBoxId);
+
+  // Get the mismatch text element
+  const mismatchText = document.getElementById(mismatchTextId);
+
+  // Set the background color of the mismatch box based on whether mismatches are ignored
+  mismatchBox.style.background = mismatchesIgnored ? matchGreen : mismatchRed;
+
+  // Set the inner HTML of the mismatch text element based on whether mismatches are ignored
+  mismatchText.innerHTML = mismatchesIgnored ? "MATCH" : "MISMATCH";
+}
+
+
+
+/**
  * Adds event listener to the form submission event.
  * It prevents the default form submission behavior and performs the necessary actions.
  */
 function formHandler() {
   document.getElementById(hashFormId).addEventListener('submit', function(event) {
     event.preventDefault();
+
+    // Update the mismatch box
+    updateMismatchBox(false);
+
+    // Hide the initial elements
+    hideInitialElements();
 
     // Get the container element
     const container = document.getElementById(mismatchCenterBoxId);
@@ -401,15 +427,7 @@ function formHandler() {
         // Check if all toggles are on
         const allTogglesOn = Array.from(ignoreBoxes).every(ignoreBox => ignoreBox.querySelector('.toggle').checked);
 
-        if (allTogglesOn) {
-          // Change the background color of mismatchCenterBoxId to matchGreen
-          document.getElementById(mismatchCenterBoxId).style.background = matchGreen;
-          document.getElementById(mismatchTextId).innerHTML = "MATCH";
-        } else {
-          // Reset the background color of mismatchCenterBoxId
-          document.getElementById(mismatchCenterBoxId).style.background = mismatchRed;
-          document.getElementById(mismatchTextId).innerHTML = "MISMATCH";
-        }
+        updateMismatchBox(allTogglesOn);
     
       });
     });    
