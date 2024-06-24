@@ -1,18 +1,24 @@
-const INPUT_TEXT1_ID = 'Document01';
-const INPUT_TEXT2_ID = 'Document02';
-const PARAGRAPH1_ID = 'paragraph01';
-const PARAGRAPH2_ID = 'paragraph02';
-const HASH_FORM_ID = 'hashForm';
-const MISMATCH_CENTER_ID = 'mismatchCenterBox01';
-const MISMATCH_TEXT_ID = 'mismatchText';
-const IGNORE_GRAY = 'rgb(217, 215, 210)';
-const MATCH_GREEN = 'linear-gradient(rgb(32, 239, 32), rgb(24, 179, 24))'
-const MISMATCH_RED = 'linear-gradient(rgb(243, 9, 9), rgb(174, 10, 10))'
-const ID_COLOR_MAP = {};
+// Element IDs
+const inputText1Id = 'document01';
+const inputText2Id = 'document02';
+const paragraph1Id = 'paragraph01';
+const paragraph2Id = 'paragraph02';
+const hashFormId = 'hashForm';
+const mismatchTextId = 'mismatchText';
+const originIgnoreBoxId = 'ignoreBox01';
+const blankCenterBoxId = 'blankCenterBox';
+const matchCenterBoxId = 'matchCenterBox';
+const mismatchCenterBoxId = 'mismatchCenterBox';
 
-var COLOR_INDEX; // Index to use for both color arrays
-var lastColors = []; // Array to store recently used indices, acting as a fixed-size queue
-var SOLID_COLORS = [
+// Global variables
+const ignoreGray = 'rgb(217, 215, 210)';
+const matchGreen = 'linear-gradient(rgb(32, 239, 32), rgb(24, 179, 24))';
+const mismatchRed = 'linear-gradient(rgb(243, 9, 9), rgb(174, 10, 10))';
+const idColorMap = {};
+
+let colorIndex; // Index to use for both color arrays
+let lastColors = []; // Array to store recently used indices, acting as a fixed-size queue
+const solidColors = [
     "rgb(36,113,164)",
     "rgb(13,206,164)",
     "rgb(127,29,218)",
@@ -20,7 +26,7 @@ var SOLID_COLORS = [
     "rgb(137,229,245)"
 ];
 
-var GRAD_COLORS = [
+const gradColors = [
     "linear-gradient(rgb(36,113,164), rgb(18,56,82))",
     "linear-gradient(rgb(13,206,164), rgb(6,103,82))",
     "linear-gradient(rgb(127,29,218), rgb(63,15,109))",
@@ -28,82 +34,153 @@ var GRAD_COLORS = [
     "linear-gradient(rgb(137,229,245), rgb(68,115,122))"
 ];
 
+
+/**
+ * Retrieves a new random color index that has not been used recently.
+ *
+ * @return {number} The new random color index.
+ */
 function getNewColorIndex() {
-    var randomIndex;
+    let randomIndex;
     
-    // If lastColors array is full, remove the oldest entry
-    if (lastColors.length === Math.ceil(SOLID_COLORS.length / 2)) {
+    // Check if the lastColors array is full and remove the oldest entry
+    if (lastColors.length === Math.ceil(solidColors.length / 2)) {
         lastColors.shift(); 
     }
     
     // Generate a random index that hasn't been used recently
     do {
-        randomIndex = Math.floor(Math.random() * SOLID_COLORS.length);
+        randomIndex = Math.floor(Math.random() * solidColors.length);
     } while (lastColors.includes(randomIndex));
     
-    lastColors.push(randomIndex); // Add the new randomIndex to lastColors
+    // Add the new randomIndex to lastColors
+    lastColors.push(randomIndex);
     
-    COLOR_INDEX = randomIndex; // Update COLOR_INDEX with the current randomIndex
-    return COLOR_INDEX;
+    // Update colorIndex with the current randomIndex
+    colorIndex = randomIndex;
+    
+    return colorIndex;
 }
 
+
+
+/**
+ * Generates a new ignore box element with the given ID and text content.
+ *
+ * @param {string} id - The ID of the ignore box.
+ * @param {string} text - The text content of the ignore box.
+ */
 function generateIgnoreBox(id, text) {
-  //get orginal element
-  var original = document.getElementById('ignoreBox01');
-  //clone element and it's content
-  var clone = original.cloneNode(true);
-  clone.style.display = 'block';
-  //set new attributes like ID and color
-  clone.id = 'ignorebox-' + id;
-  clone.getElementsByTagName('p')[0].innerHTML = text;
-  //get a new color
-  var newColor = GRAD_COLORS[COLOR_INDEX]; //gets the gradient color to match the text highlight
-  ID_COLOR_MAP[id] = newColor;
+  // Get the original ignore box element
+  const originBox = document.getElementById(originIgnoreBoxId);
 
-  clone.style.background = newColor;
+  // Clone the original ignore box element
+  const clonedBox = originBox.cloneNode(true);
 
-  //find checkbox and toggle label within the cloned template
-  var clonedCheckBox=clone.querySelector('.toggle');
-  var clonedToggleLabel=clone.querySelector('.toggleLabel')
-  //assign unique IDs to checkbox and togglelabel
-  var checkboxID='ignore'+id;
-  clonedCheckBox.id=checkboxID;
-  clonedToggleLabel.setAttribute('for',checkboxID);
-  
+  // Set the display of the cloned box to 'block'
+  clonedBox.style.display = 'block';
 
+  // Set the ID of the cloned box
+  clonedBox.id = `ignorebox-${id}`;
 
-  //append
-  var targetDiv = document.getElementById(MISMATCH_CENTER_ID);
-  targetDiv.appendChild(clone);
+  // Set the text content of the first <p> element in the cloned box
+  clonedBox.querySelector('p').textContent = text;
+
+  // Get a new color for the ignore box
+  const newColor = gradColors[colorIndex];
+
+  // Store the new color in the ID color map
+  idColorMap[id] = newColor;
+
+  // Set the background color of the cloned box to the new color
+  clonedBox.style.background = newColor;
+
+  // Get the checkbox and toggle label elements in the cloned box
+  const checkbox = clonedBox.querySelector('.toggle');
+  const toggleLabel = clonedBox.querySelector('.toggleLabel');
+
+  // Generate a unique ID for the checkbox
+  const checkboxId = `ignore${id}`;
+
+  // Set the ID of the checkbox
+  checkbox.id = checkboxId;
+
+  // Set the 'for' attribute of the toggle label to the checkbox ID
+  toggleLabel.setAttribute('for', checkboxId);
+
+  // Get the target div element to append the cloned box to
+  const targetDiv = document.getElementsByClassName(mismatchCenterBoxId)[0];
+
+  // Append the cloned box to the target div
+  targetDiv.appendChild(clonedBox);
 }
 
-function toggleDisplay(testState) {
-  var blankCenterBox = document.querySelector('.blankCenterBox');
-  var matchCenterBox = document.querySelector('.matchCenterBox');
-  var mismatchCenterBox = document.querySelector('.mismatchCenterBox');
 
-  if (testState === "mismatch") {
-    blankCenterBox.style.display = 'none';
-    matchCenterBox.style.display = 'none';
-    mismatchCenterBox.style.display = 'block';
-  } else if (testState === "match") {
-    blankCenterBox.style.display = 'none';
-    matchCenterBox.style.display = 'block';
-    mismatchCenterBox.style.display = 'none';
-  } else {
-    blankCenterBox.style.display = 'block';
-    matchCenterBox.style.display = 'none';
-    mismatchCenterBox.style.display = 'none';
+
+/**
+ * Toggles the display of center boxes based on the test state.
+ *
+ * @param {string} state - The match/mismatch state. Can be "mismatch", "match", or "blank".
+ */
+function toggleDisplay(state) {
+  // Get the center boxes by their IDs
+  const centerBoxes = {
+    blank: document.getElementById(blankCenterBoxId),
+    match: document.getElementById(matchCenterBoxId),
+    mismatch: document.getElementById(mismatchCenterBoxId)
+  };
+
+  // Toggle the display of the center boxes based on the test state
+  switch (state) {
+    // If the test state is "mismatch", hide the blank and match center boxes and show the mismatch center box
+    case "mismatch":
+      centerBoxes.blank.style.display = 'none';
+      centerBoxes.match.style.display = 'none';
+      centerBoxes.mismatch.style.display = 'block';
+      break;
+
+    // If the test state is "match", hide the blank center box and show the match and mismatch center boxes
+    case "match":
+      centerBoxes.blank.style.display = 'none';
+      centerBoxes.match.style.display = 'block';
+      centerBoxes.mismatch.style.display = 'none';
+      break;
+
+    // If the test state is neither "mismatch" nor "match", show the blank center box and hide the match and mismatch center boxes
+    default:
+      centerBoxes.blank.style.display = 'block';
+      centerBoxes.match.style.display = 'none';
+      centerBoxes.mismatch.style.display = 'none';
   }
 }
    
+
+
+/**
+ * Calculates the SHA3-512 hash value of a given text.
+ *
+ * @param {string} text - The text to calculate the hash for.
+ * @return {string} The SHA3-512 hash value of the text.
+ */
 function calculateHash(text) {
+  // Calculate the SHA3-512 hash of the given text.
   return sha3_512(text);
 }
 
+
+
+/**
+ * Compares two texts by calculating their SHA3-512 hash values and checking if they are equal.
+ * @param {string} text1 - The first text.
+ * @param {string} text2 - The second text.
+ * @return {boolean} True if the hash values of the texts are equal, false otherwise.
+ */
 function compareTexts(text1, text2) {
+  // Calculate the SHA3-512 hash values of the texts
+  // and check if they are equal.
   return calculateHash(text1) === calculateHash(text2);
 }
+
 
 
 /**
@@ -159,14 +236,27 @@ function diffTexts(text1, text2) {
   return diff;
 }
 
-// Function to wrap characters in text with specified highlights
+
+
+/**
+ * Wraps characters in the specified text containers with colored spans based on the given diff output.
+ * @param {string} textContainer1Id - The ID of the first text container.
+ * @param {string} textContainer2Id - The ID of the second text container.
+ * @param {object} diffOutput - The diff output containing the removed and added characters.
+ */
 function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
+  // Get the text containers and their texts
   const textContainer1 = document.getElementById(textContainer1Id);
   const textContainer2 = document.getElementById(textContainer2Id);
   const text1 = textContainer1?.textContent?.trim() || '';
   const text2 = textContainer2?.textContent?.trim() || '';
 
-  // Function to wrap characters with colored spans
+  /**
+   * Wraps characters with colored spans in the given text based on the specified changes.
+   * @param {string} text - The text to wrap characters in.
+   * @param {number[]} changes - The indices of characters to wrap.
+   * @returns {string} - The wrapped text.
+   */
   const wrapCharacters = (text, changes) => {
     if (!text || !changes || changes.length === 0) {
       return text; // Return original text if there are no changes
@@ -183,12 +273,12 @@ function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
           currentIndex++;
         }
         const end = currentIndex;
-        
+
         // Generate a random ID for the highlight span
         const id = Math.random().toString(36).substring(7);
 
         // Wrap sequence of changes in span tag
-        result += `<span id="highlight-${id}" style="background-color: ${SOLID_COLORS[getNewColorIndex()]};">${text.substring(start, end)}</span>`;
+        result += `<span id="highlight-${id}" style="background-color: ${solidColors[getNewColorIndex()]};">${text.substring(start, end)}</span>`;
         generateIgnoreBox(id, text.substring(start, end));
 
         storeHighlight(id, start, end);
@@ -201,70 +291,94 @@ function wrapIndexesWithColors(textContainer1Id, textContainer2Id, diffOutput) {
     return result;
   };
 
-// Wrap removed characters in text1
-document.getElementById(MISMATCH_CENTER_ID).innerHTML += '<h3>REMOVED</h3>';
-const wrappedText1 = wrapCharacters(text1, diffOutput.removed);
-textContainer1.innerHTML = wrappedText1;
+  // Wrap removed characters in text1
+  document.getElementById(mismatchCenterBoxId).innerHTML += '<h3>REMOVED</h3>';
+  const wrappedText1 = wrapCharacters(text1, diffOutput.removed);
+  textContainer1.innerHTML = wrappedText1;
 
-// Wrap added characters in text2
-document.getElementById(MISMATCH_CENTER_ID).innerHTML += '<h3>ADDED</h3>';
-const wrappedText2 = wrapCharacters(text2, diffOutput.added);
-textContainer2.innerHTML = wrappedText2;
+  // Wrap added characters in text2
+  document.getElementById(mismatchCenterBoxId).innerHTML += '<h3>ADDED</h3>';
+  const wrappedText2 = wrapCharacters(text2, diffOutput.added);
+  textContainer2.innerHTML = wrappedText2;
 }
 
-// Function to store the highlight ID and index range in a data structure
+
+
+/**
+ * Stores the highlight information for a given ID.
+ * @param {string} id - The ID of the highlight.
+ * @param {number} start - The starting index of the highlight.
+ * @param {number} end - The ending index of the highlight.
+ * @returns {Object} - An object containing the highlight information.
+ */
 const storeHighlight = (id, start, end) => {
-  // Create a data structure to store the highlights
+  // Create an object to store the highlight information
   const highlights = {};
 
-  // Store the ID and index range in the data structure
+  // Store the highlight information with the given ID, start, and end indices
   highlights[id] = { start, end };
 
+  // Return the object containing the highlight information
   return highlights;
-};
+}
 
+
+
+/**
+ * Adds event listener to the form submission event.
+ * It prevents the default form submission behavior and performs the necessary actions.
+ */
 function formHandler() {
-  document.getElementById(HASH_FORM_ID).addEventListener('submit', function(event) {
+  document.getElementById(hashFormId).addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const container = document.getElementById(MISMATCH_CENTER_ID); // Replace 'container_id' with the actual ID of your container element
+    // Get the container element
+    const container = document.getElementById(mismatchCenterBoxId);
 
     // Remove all child elements except the first one
     const children = Array.from(container.children);
     if (children.length > 3) {
       children.slice(3).forEach(child => container.removeChild(child));
     }
-    const inputText1 = document.getElementById(INPUT_TEXT1_ID).value;
-    const inputText2 = document.getElementById(INPUT_TEXT2_ID).value;
 
+    // Get the input texts
+    const inputText1 = document.getElementById(inputText1Id).value;
+    const inputText2 = document.getElementById(inputText2Id).value;
+
+    // Compare the texts
     const result = compareTexts(inputText1, inputText2);
 
-    document.getElementById(PARAGRAPH1_ID).innerText = inputText1;
-    document.getElementById(PARAGRAPH2_ID).innerText = inputText2;
+    // Update the paragraphs with the input texts
+    document.getElementById(paragraph1Id).innerText = inputText1;
+    document.getElementById(paragraph2Id).innerText = inputText2;
 
-        document.getElementById(INPUT_TEXT1_ID).style.display = 'none';
-        document.getElementById(INPUT_TEXT2_ID).style.display = 'none';
+    // Hide the input texts and paragraphs
+    document.getElementById(inputText1Id).style.display = 'none';
+    document.getElementById(inputText2Id).style.display = 'none';
+    document.getElementById(paragraph1Id).style.display = 'block';
+    document.getElementById(paragraph2Id).style.display = 'block';
 
-        document.getElementById(PARAGRAPH1_ID).style.display = 'block';
-        document.getElementById(PARAGRAPH2_ID).style.display = 'block';
+    // Toggle the display based on the result
+    if (result) {
+        toggleDisplay("match");
+    } else {
+        toggleDisplay("mismatch");
+    }
 
-        if (result) {
-            toggleDisplay("match");
-        } else {
-            toggleDisplay("mismatch");
-        }
-
-    document.getElementById(PARAGRAPH1_ID).textContent = inputText1;
-    document.getElementById(PARAGRAPH2_ID).textContent = inputText2;
+    // Update the paragraphs with the input texts
+    document.getElementById(paragraph1Id).textContent = inputText1;
+    document.getElementById(paragraph2Id).textContent = inputText2;
 
     // Perform word-level diff
     const diffOutput = diffTexts(inputText1, inputText2);
 
     // Highlight the changes in the paragraphs
-    wrapIndexesWithColors(PARAGRAPH1_ID, PARAGRAPH2_ID, diffOutput);
+    wrapIndexesWithColors(paragraph1Id, paragraph2Id, diffOutput);
 
+    // Get all ignore boxes except the first one
     const ignoreBoxes = document.querySelectorAll('.ignoreBox:not(#ignoreBox01)');
 
+    // Add event listener to each ignore box toggle
     ignoreBoxes.forEach(ignoreBox => {
       const toggle = ignoreBox.querySelector('.toggle');
     
@@ -272,27 +386,29 @@ function formHandler() {
         const sharedID = ignoreBox.id.replace('ignorebox-', '');
         const highlightId = `highlight-${sharedID}`;
         const highlight = document.getElementById(highlightId);
-        console.log("Hello");
+
+        // Toggle the background color of the highlight and ignore box
         if (!toggle.checked) {
           // Ignore box is turned on
-          highlight.style.background = ID_COLOR_MAP[sharedID];
-          ignoreBox.style.background = ID_COLOR_MAP[sharedID];
+          highlight.style.background = idColorMap[sharedID];
+          ignoreBox.style.background = idColorMap[sharedID];
         } else {
           // Ignore box is turned off
-          highlight.style.background = IGNORE_GRAY;
-          ignoreBox.style.background = IGNORE_GRAY;
+          highlight.style.background = ignoreGray;
+          ignoreBox.style.background = ignoreGray;
         }
 
+        // Check if all toggles are on
         const allTogglesOn = Array.from(ignoreBoxes).every(ignoreBox => ignoreBox.querySelector('.toggle').checked);
 
         if (allTogglesOn) {
-          // Change the background color of #mismatchCenterBox01 to MATCH_GREEN
-          document.getElementById(MISMATCH_CENTER_ID).style.background = MATCH_GREEN;
-          document.getElementById(MISMATCH_TEXT_ID).innerHTML = "MATCH";
+          // Change the background color of mismatchCenterBoxId to matchGreen
+          document.getElementById(mismatchCenterBoxId).style.background = matchGreen;
+          document.getElementById(mismatchTextId).innerHTML = "MATCH";
         } else {
-          // Reset the background color of #mismatchCenterBox01
-          document.getElementById(MISMATCH_CENTER_ID).style.background = MISMATCH_RED;
-          document.getElementById(MISMATCH_TEXT_ID).innerHTML = "MISMATCH";
+          // Reset the background color of mismatchCenterBoxId
+          document.getElementById(mismatchCenterBoxId).style.background = mismatchRed;
+          document.getElementById(mismatchTextId).innerHTML = "MISMATCH";
         }
     
       });
@@ -300,12 +416,32 @@ function formHandler() {
   });
 }
 
+
+
+/**
+ * Hides the initial elements on the page.
+ * This function is called on the window load event.
+ */
 function hideInitialElements() {
-  document.querySelector('.matchCenterBox').style.display = 'none';
-  document.querySelector('.mismatchCenterBox').style.display = 'none';
+  // Hide the 'matchCenterBox' element
+  // This element is initially displayed by default
+  document.getElementById(matchCenterBoxId).style.display = 'none';
+
+  // Hide the 'mismatchCenterBox' element
+  // This element is initially displayed by default
+  document.getElementById(mismatchCenterBoxId).style.display = 'none';
 }
 
+
+
+/**
+ * This function is called when the window has finished loading.
+ * It hides the initial elements on the page and sets up the form handler.
+ */
 window.onload = function() {
+  // Hide the initial elements on the page
   hideInitialElements();
+
+  // Set up the form handler
   formHandler();
 };
